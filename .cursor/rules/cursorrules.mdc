@@ -1,0 +1,15 @@
+---
+alwaysApply: true
+---
+
+# Tech Stack
+- Python 3
+- uv by Astral (Dependency / Package Management)
+- Pytest (Testing)
+- Pydantic 2 (Data Validation)
+- HTTPX + Authlib (HTTP + OAuth Client)
+- FastAPI (Backend Web Development) 
+- Database (Haven't decided on Supabase or Airtable)
+- PyAirtable (Python Client Library)
+- Buildium OpenAPI
+- Google APIs
