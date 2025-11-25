@@ -8,10 +8,18 @@ wheels/
 
 # Virtual environments
 .venv
+.env
+.code-workspace
 
 # Google Cloud Credentials
 *.json
 
 # Context for LLM
 .context
-.env
+.cursor
+
+# Domain Data / Assets
+.xlsx
+.csv
+
+

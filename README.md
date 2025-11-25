@@ -50,7 +50,7 @@ Here’s what we’ll visualize in the C4-style breakdown:
              ▼
    ┌──────────────────────┐
    │ core/                │
-   │   db.py              │   ← SQLModel + Postgres
+   │   airtable.py        │   ← PyAirtable Client
    │   events.py          │   ← Event bus / async triggers
    │   cache.py           │   ← Redis / job queue
    │   logging.py         │
@@ -69,7 +69,7 @@ Wonder Street Platform connects:
 * Airtable (PM Balance Sheet)
 * RLS / CoreLogic (MLS Listings)
 * Gmail (communications feed)
-  to a unified operational backend (FastAPI + SQLModel).
+  to a unified operational backend (FastAPI + Airtable).
 
 ---
 
@@ -78,7 +78,7 @@ Wonder Street Platform connects:
 | Container               | Tech                                 | Description                                                         |
 | ----------------------- | ------------------------------------ | ------------------------------------------------------------------- |
 | **FastAPI app**         | Python (Uvicorn)                     | Hosts REST endpoints, event listeners, and internal API calls.      |
-| **PostgreSQL**          | SQLModel ORM                         | Stores listings, sync states, tenant/lease records, and audit logs. |
+| **Airtable Base**         | PyAirtable Client                    | Stores listings, sync states, tenant/lease records, and audit logs. |
 | **Redis / Cache Layer** | Redis / RQ                           | Queue for webhook + email event processing.                         |
 | **External Services**   | Buildium, Airtable, CoreLogic, Gmail | Source systems for syncs and event triggers.                        |
 
@@ -103,7 +103,7 @@ Wonder Street Platform connects:
 * **integrations/rls.py** — OAuth2 + OData client for Trestle API.
 * **domains/listings/integrations.py** — Pulls listings, photos, metadata.
 * **domains/listings/services.py** — Normalizes RESO schema → internal listing model.
-* **core/db.py** — Persist listings and media.
+* **core/airtable.py** — Persist listings and media via Repository.
 * (Optional later) sync job in **core/events.py** for periodic refresh.
 
 #### 📬 Gmail Manager
@@ -150,7 +150,7 @@ app/
 │   └── gmail.py
 │
 ├── core/
-│   ├── db.py
+│   ├── airtable.py
 │   ├── events.py
 │   ├── logging.py
 │   └── cache.py

@@ -28,7 +28,7 @@ wonderstreet-demo/
 - **`api/v1/routers/`**: HTTP endpoints, request/response handling, minimal business logic
 - **`domains/`**: Business logic, domain models, orchestration between integrations
 - **`integrations/`**: External API clients, authentication, data transformation
-- **`core/`**: Logging, configuration, database, events (planned)
+- **`core/`**: Logging, configuration, Airtable client, events (planned)
 
 ## Design Patterns & Principles
 
@@ -52,6 +52,11 @@ wonderstreet-demo/
 - FastAPI endpoints are async
 - HTTPX for async HTTP requests
 
+### 5. Repository Pattern
+- Data access logic is encapsulated in Repository classes (e.g., `ListingRepository`)
+- Decouples domain logic from the underlying storage (Airtable)
+- Facilitates future migration to SQL if needed
+
 ## Technology Stack
 
 | Component | Technology | Purpose |
@@ -61,7 +66,7 @@ wonderstreet-demo/
 | **OAuth/Auth** | Authlib 1.6.5+, google-auth 2.43.0+ | OAuth2, service account auth |
 | **Data Validation** | Pydantic 2 | Models, settings, validation |
 | **Logging** | Loguru 0.7.3 | Structured logging |
-| **Airtable** | PyAirtable 3.3.0+ | Airtable API client |
+| **Database** | Airtable (via PyAirtable) | Primary persistence layer (NoSQL-like) |
 | **Package Manager** | uv (Astral) | Dependency management |
 | **Python Version** | 3.11+ | Type hints, modern features |
 
@@ -83,7 +88,7 @@ wonderstreet-demo/
 - Airtable integration (`integrations/airtable.py` is empty)
 - RLS integration (`integrations/rls.py` is empty)
 - FastAPI app initialization in `main.py` (currently placeholder)
-- Database layer (`core/db.py` - planned)
+- Database layer (`core/airtable.py` - planned)
 - Event system (`core/events.py` - planned)
 - Cache/queue (`core/cache.py` - planned)
 
@@ -97,7 +102,7 @@ Google Pub/Sub → /webhooks/gmail endpoint
   → [TODO: Process with GmailClient]
   → [TODO: Parse email content]
   → [TODO: Classify email]
-  → [TODO: Store in database]
+  → [TODO: Store in Airtable via Repository]
 ```
 
 ### Planned: Buildium ↔ Airtable Sync
@@ -114,7 +119,7 @@ Buildium Webhook → Event Queue
 RLS API → OAuth2 Client
   → Fetch listings (OData)
   → Normalize RESO schema → Internal model
-  → Persist to database
+  → Persist to Airtable
 ```
 
 ## Key Design Decisions
@@ -172,7 +177,7 @@ RLS API → OAuth2 Client
 
 ## Missing Infrastructure (Planned)
 
-1. **Database layer** (`core/db.py`): SQLModel + PostgreSQL
+1. **Database layer** (`core/airtable.py`): PyAirtable client + Repository base
 2. **Event system** (`core/events.py`): Webhook triggers, retry logic
 3. **Cache/Queue** (`core/cache.py`): Redis for job queues
 4. **Configuration** (`core/config.py`): Pydantic Settings for env vars
